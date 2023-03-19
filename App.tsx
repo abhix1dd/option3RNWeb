@@ -20,16 +20,20 @@ import {
   Text,
   useColorScheme,
   View,
+  Alert,
 } from 'react-native';
 
 import Contacts from 'react-native-contacts';
 import ListItem from './components/ListItem';
+import * as ContactsWeb from 'expo-contacts';
 
 
 
 const App = () => {
 
   let [contacts, setContacts] = useState([]);
+  let [webContacts, setWebContacts] = useState(-2);
+  let [avai, setAvail] = useState(true);
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -47,9 +51,9 @@ const App = () => {
   }, []);
 
 
-const loadContacts = () => {
-    
-    Contacts.getAll()
+const loadContacts = async () => {
+    if(Platform.os ==='android'){
+      Contacts.getAll()
       .then(contacts => {
         contacts.sort(
           (a, b) => 
@@ -62,6 +66,28 @@ const loadContacts = () => {
         alert('Permission to access contacts was denied');
         console.warn('Permission to access contacts was denied');
       });
+    }else{
+      console.log('Fetching Permissions');
+        const { status } = await ContactsWeb.requestPermissionsAsync();
+        let availabel = await ContactsWeb.isAvailableAsync()
+        console.log('Permissions',status);
+        console.log('Permissions',availabel);
+        setAvail(availabel);
+        // if (status === 'granted') {
+          const { data } = await ContactsWeb.getContactsAsync({
+            fields: [
+              ContactsWeb.Fields.PhoneNumbers
+            ],
+            sort: ContactsWeb.SortTypes.FirstName 
+        });
+        setWebContacts(data.length)
+          console.log(data.length)
+          if (data.length > 0) {
+            const contact = data[0];
+            console.log(contact);
+          }
+        // }
+      }
   };
 
 
@@ -73,6 +99,8 @@ const openContact = (contact) => {
 
   return (
     <SafeAreaView style={styles.container}>
+    <h1>{webContacts}</h1>
+    <h1>{avai.toString()}</h1>
       <View style={styles.container}>
         <FlatList
           data={contacts}

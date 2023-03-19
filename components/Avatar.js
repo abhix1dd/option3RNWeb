@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 });
 
 Avatar.propTypes = {
-  img: Image.propTypes.source,
+  // img: Image.PropTypes.source,
   placeholder: PropTypes.string,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,

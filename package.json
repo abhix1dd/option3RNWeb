@@ -20,6 +20,7 @@
     "react-native": "0.71.4",
     "react-native-contacts": "^7.0.5",
     "react-native-web": "^0.18.12",
+    "react-native-web-contacts": "^0.0.0-alpha.1",
     "url-loader": "^4.1.1",
     "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1",
